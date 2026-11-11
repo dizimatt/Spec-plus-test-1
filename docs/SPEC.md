@@ -116,7 +116,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - Priority: Should
 - Description: Grid, pieces, rotation, queue and water-step rules live in pure JavaScript modules with no Phaser dependency, covered by Node tests.
 - Acceptance criteria:
-  - [ ] `node --test tests/` runs and passes.
+  - [ ] `node --test` runs and passes.
   - [ ] Tests cover: piece openings per rotation, queue refill, placement rules, rotation lock, a water path that wins, and a water path that spills (gap, dead end, blocked cell, edge).
   - [ ] Game scenes call the logic modules for rules instead of re-implementing them.
 - Origin: Assumption
@@ -147,7 +147,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - Stack: Phaser 3 (pin an exact version, vendored into the repo, e.g. `lib/phaser.min.js`), plain JavaScript ES modules, no bundler, no other dependencies. Files: `index.html`, `src/` (scenes, logic), `levels/` (JSON), `tests/`.
 - Graphics are drawn in code and converted to textures at boot (R-008).
 - Builder model: Claude Sonnet (tier A), context default, tool Claude Code.
-- Build/test commands: none (no build step); `node --test tests/`. The game is also checked by playtest via `python3 -m http.server`.
+- Build/test commands: none (no build step); `node --test` (Node 24 does not accept a bare directory argument). The game is also checked by playtest via `python3 -m http.server`.
 
 ## 6. Assumptions and open questions
 - A-001 Phaser 3 is the version used — proposed default, needs confirmation
@@ -163,7 +163,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 
 ## 7. Task backlog
 - T-001 Scaffold: `index.html`, vendored Phaser, boot scene generating all textures, empty menu scene — Requirements: R-001, R-008 — Status: done
-- T-002 Pure logic modules (pieces, rotation, grid, queue, water step) with Node tests — Requirements: R-003, R-004, R-005, R-006, R-010 — Status: todo
+- T-002 Pure logic modules (pieces, rotation, grid, queue, water step) with Node tests — Requirements: R-003, R-004, R-005, R-006, R-010 — Status: done
 - T-003 Level format, loader with validation, and 5 level files — Requirements: R-002, R-007 — Status: todo
 - T-004 Game scene: grid, queue display, placing and rotating — Requirements: R-003, R-004, R-009 — Status: todo
 - T-005 Water flow animation, tile locking, win and lose screens — Requirements: R-005, R-006 — Status: todo
