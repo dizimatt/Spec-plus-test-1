@@ -38,7 +38,7 @@ These are kept on purpose for testing. They are always on, so they are available
 
 | Key | Effect |
 |---|---|
-| **P** | Pause / resume the water clock (countdown and flow) at any time. You can still place and rotate while paused. The status line reads "PAUSED: P resume, G go". |
+| **P** | Pause / resume the water clock (countdown and flow) at any time. You can still place and rotate while paused. The status line reads "PAUSED: P resume". G is not mentioned anywhere in the game, only here. |
 | **G** | Skip the rest of the countdown and start the water now. |
 
 Handy browser-console snippets (DevTools, then Console; Chrome asks you to type `allow pasting` first). They only touch this page's local storage:

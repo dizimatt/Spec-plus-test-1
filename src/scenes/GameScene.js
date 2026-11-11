@@ -154,7 +154,7 @@ export default class GameScene extends Phaser.Scene {
 
   updateStatus() {
     const r = this.round;
-    if (this.cheatPaused && !this.round.over) this.status.setText('PAUSED: P resume, G go'); // DEV CHEAT
+    if (this.cheatPaused && !this.round.over) this.status.setText('PAUSED: P resume'); // DEV CHEAT
     else if (r.phase === 'countdown') this.status.setText(`Water starts in ${Math.ceil(r.countdown)}s${this.fast ? ` (x${FAST_FORWARD})` : ''}`);
     else if (r.phase === 'flowing') this.status.setText(`Water is flowing!${this.fast ? ` (x${FAST_FORWARD})` : ''}`);
     else this.status.setText(r.phase === 'won' ? 'Connected!' : 'Spilled!');
