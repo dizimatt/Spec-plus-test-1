@@ -2,6 +2,7 @@ import { GAME_WIDTH, GAME_HEIGHT, TILE, TEX } from '../config.js';
 import { Grid } from '../logic/grid.js';
 import { PieceQueue } from '../logic/queue.js';
 import { Round } from '../logic/round.js';
+import { computeScore } from '../logic/score.js';
 import { LEVEL_COUNT } from '../levels.js';
 
 const GRID_X = 96;   // left edge of grid; the source sits in the 64px before it
@@ -41,6 +42,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.add.text(24, 20, `Level ${this.levelNumber}`, { ...TEXT, fontSize: '32px' });
     this.add.text(400, 38, 'Pipe Nightmare', { ...TEXT, fontSize: '30px', fontStyle: 'bold' }).setOrigin(0.5);
+    this.tilesText = this.add.text(400, 72, 'Tiles: 0', { ...TEXT, fontSize: '20px', color: '#9fd0ff' }).setOrigin(0.5);
     this.status = this.add.text(24, 62, '', { ...TEXT, fontSize: '20px', color: '#9fd0ff' });
     this.makeButton(GAME_WIDTH - 250, 38, 'Restart', () => this.scene.restart({ level: this.levelNumber }));
     this.makeButton(GAME_WIDTH - 110, 38, 'Levels', () => this.scene.start('Menu'));
@@ -95,6 +97,7 @@ export default class GameScene extends Phaser.Scene {
     const type = this.queue.peek();
     if (!this.grid.place(x, y, type).ok) return;
     this.queue.take();
+    this.tilesText.setText(`Tiles: ${this.grid.tilesPlaced}`);
     const { px, py } = this.cellCentre(x, y);
     this.tileImages.set(`${x},${y}`, this.add.image(px, py, PIPE_TEX[type]).setDepth(1));
     this.syncTile(x, y);
@@ -129,7 +132,7 @@ export default class GameScene extends Phaser.Scene {
     this.updateStatus();
     if (this.round.over && !this.endShown) {
       this.endShown = true;
-      if (this.round.phase === 'won') this.registry.get('progress').unlockNext(this.levelNumber);
+      if (this.round.phase === 'won') this.recordWin();
       this.markSpill();
       // Brief pause so the last of the water is seen before the dialog.
       this.time.delayedCall(700, () => this.showEnd());
@@ -165,6 +168,16 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
+  // A win unlocks the next level and saves the score if it is the best so far
+  // (R-007, R-011). A lost level gives no score.
+  recordWin() {
+    const progress = this.registry.get('progress');
+    progress.unlockNext(this.levelNumber);
+    this.score = computeScore(this.grid.tilesPlaced);
+    this.newBest = progress.recordScore(this.levelNumber, this.score);
+    this.best = progress.bestScore(this.levelNumber);
+  }
+
   markSpill() {
     const at = this.round.spillAt;
     const cell = at && this.cellImages.get(`${at.x},${at.y}`);
@@ -184,6 +197,14 @@ export default class GameScene extends Phaser.Scene {
     if (!won) {
       this.add.text(cx, cy - 36, SPILL_TEXT[this.round.reason] || '', {
         ...TEXT, fontSize: '20px',
+      }).setOrigin(0.5).setDepth(12);
+    } else {
+      this.add.text(cx, cy - 38, `Score: ${this.score}`, { ...TEXT, fontSize: '34px' })
+        .setOrigin(0.5).setDepth(12);
+      this.add.text(cx, cy, `Tiles used: ${this.grid.tilesPlaced}`, { ...TEXT, fontSize: '20px' })
+        .setOrigin(0.5).setDepth(12);
+      this.add.text(cx, cy + 28, this.newBest ? 'New best!' : `Best: ${this.best}`, {
+        ...TEXT, fontSize: '18px', color: this.newBest ? '#ffd76a' : '#9fd0ff',
       }).setOrigin(0.5).setDepth(12);
     }
     const buttons = [['Retry', () => this.scene.restart({ level: this.levelNumber })]];

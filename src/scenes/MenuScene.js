@@ -22,13 +22,18 @@ export default class MenuScene extends Phaser.Scene {
       const y = 340;
       const open = progress.isUnlocked(n);
       const tile = this.add.image(x, y, open ? TEX.levelTile : TEX.levelLocked);
-      this.add.text(x, y - (open ? 0 : 10), String(n), {
+      this.add.text(x, y - 10, String(n), {
         ...TEXT, fontSize: '48px', color: open ? '#ffffff' : '#4a5b6b',
       }).setOrigin(0.5);
       if (!open) {
         this.add.text(x, y + 30, 'Locked', { ...TEXT, fontSize: '16px', color: '#4a5b6b' }).setOrigin(0.5);
         continue;
       }
+      // Best score for this level, saved in the browser (R-011).
+      const best = progress.bestScore(n);
+      this.add.text(x, y + 32, best === null ? 'No score' : `Best ${best}`, {
+        ...TEXT, fontSize: '16px', color: best === null ? '#9fb4c8' : '#ffd76a',
+      }).setOrigin(0.5);
       tile.setInteractive({ useHandCursor: true });
       tile.on('pointerover', () => tile.setTint(0xbbddff));
       tile.on('pointerout', () => tile.clearTint());

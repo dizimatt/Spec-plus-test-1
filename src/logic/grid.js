@@ -18,6 +18,10 @@ export class Grid {
       x >= 0 && x < this.width && y >= 0 && y < this.height;
   }
 
+  // Every piece placed so far. Pieces can never be removed, so this is the
+  // attempt's tile count for scoring (R-011); rotations do not change it.
+  get tilesPlaced() { return this.tiles.size; }
+
   isBlocked(x, y) { return this.blocked.has(`${x},${y}`); }
   getTile(x, y) { return this.tiles.get(`${x},${y}`) || null; }
 
