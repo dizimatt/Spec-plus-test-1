@@ -168,7 +168,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - T-003 Level format, loader with validation, and 5 level files — Requirements: R-002, R-007 — Status: done
 - T-004 Game scene: grid, queue display, placing and rotating — Requirements: R-003, R-004, R-009 — Status: done
 - T-005 Water flow animation, tile locking, win and lose screens — Requirements: R-005, R-006 — Status: done
-- T-006 Level select, unlock progress in localStorage, error handling — Requirements: R-007, R-009 — Status: todo
+- T-006 Level select, unlock progress in localStorage, error handling — Requirements: R-007, R-009 — Status: in-review
 - T-007 Scoring: score function with tests, tile counter, score on win screen, best scores saved and shown on level select — Requirements: R-011 — Status: todo
 - T-008 Tune the 5 levels by playtest and confirm each is winnable — Requirements: R-002, R-007, R-011 — Status: todo
 

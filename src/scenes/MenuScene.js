@@ -1,28 +1,38 @@
-import { GAME_WIDTH, TEX, TILE } from '../config.js';
+import { GAME_WIDTH, TEX } from '../config.js';
+import { LEVEL_COUNT } from '../levels.js';
 
-// Placeholder menu (level select arrives in T-006). Shows the generated
-// textures as sprites to prove the boot step worked.
+const TEXT = { fontFamily: 'sans-serif', color: '#ffffff' };
+const TILE_SIZE = 120;
+const GAP = 24;
+
+// Level select (R-007, R-009): level 1 is open on first load, the rest unlock
+// as the player wins. Locked levels are dimmed and cannot be started.
 export default class MenuScene extends Phaser.Scene {
   constructor() { super('Menu'); }
+
   create() {
-    this.add.text(GAME_WIDTH / 2, 120, 'Pipe Nightmare', {
-      fontFamily: 'sans-serif', fontSize: '56px', color: '#ffffff',
-    }).setOrigin(0.5);
+    const progress = this.registry.get('progress');
+    this.add.text(GAME_WIDTH / 2, 120, 'Pipe Nightmare', { ...TEXT, fontSize: '56px' }).setOrigin(0.5);
+    this.add.text(GAME_WIDTH / 2, 205, 'Select a level', { ...TEXT, fontSize: '26px', color: '#9fd0ff' }).setOrigin(0.5);
 
-    const keys = [TEX.source, TEX.straight, TEX.elbow, TEX.waterStraight,
-      TEX.waterElbow, TEX.cell, TEX.blocked, TEX.drain];
-    const x0 = GAME_WIDTH / 2 - (keys.length * TILE) / 2 + TILE / 2;
-    keys.forEach((key, i) => {
-      const x = x0 + i * TILE;
-      this.add.image(x, 280, TEX.cell);
-      this.add.image(x, 280, key);
-    });
-
-    // Temporary entry point until the level select arrives in T-006.
-    const play = this.add.image(GAME_WIDTH / 2, 440, TEX.button).setInteractive({ useHandCursor: true });
-    this.add.text(GAME_WIDTH / 2, 440, 'Play level 1', {
-      fontFamily: 'sans-serif', fontSize: '24px', color: '#ffffff',
-    }).setOrigin(0.5);
-    play.on('pointerdown', () => this.scene.start('Game', { level: 1 }));
+    const rowWidth = LEVEL_COUNT * TILE_SIZE + (LEVEL_COUNT - 1) * GAP;
+    const x0 = GAME_WIDTH / 2 - rowWidth / 2 + TILE_SIZE / 2;
+    for (let n = 1; n <= LEVEL_COUNT; n++) {
+      const x = x0 + (n - 1) * (TILE_SIZE + GAP);
+      const y = 340;
+      const open = progress.isUnlocked(n);
+      const tile = this.add.image(x, y, open ? TEX.levelTile : TEX.levelLocked);
+      this.add.text(x, y - (open ? 0 : 10), String(n), {
+        ...TEXT, fontSize: '48px', color: open ? '#ffffff' : '#4a5b6b',
+      }).setOrigin(0.5);
+      if (!open) {
+        this.add.text(x, y + 30, 'Locked', { ...TEXT, fontSize: '16px', color: '#4a5b6b' }).setOrigin(0.5);
+        continue;
+      }
+      tile.setInteractive({ useHandCursor: true });
+      tile.on('pointerover', () => tile.setTint(0xbbddff));
+      tile.on('pointerout', () => tile.clearTint());
+      tile.on('pointerdown', () => this.scene.start('Game', { level: n }));
+    }
   }
 }

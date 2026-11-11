@@ -28,7 +28,8 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     const level = this.registry.get('levels')?.[this.levelNumber - 1];
-    if (!level) { this.scene.start('Menu'); return; }
+    // Locked or missing levels cannot be started (R-007).
+    if (!level || !this.registry.get('progress').isUnlocked(this.levelNumber)) { this.scene.start('Menu'); return; }
     this.level = level;
     this.grid = new Grid(level);
     this.queue = new PieceQueue(level.queueSize);
@@ -128,6 +129,7 @@ export default class GameScene extends Phaser.Scene {
     this.updateStatus();
     if (this.round.over && !this.endShown) {
       this.endShown = true;
+      if (this.round.phase === 'won') this.registry.get('progress').unlockNext(this.levelNumber);
       this.markSpill();
       // Brief pause so the last of the water is seen before the dialog.
       this.time.delayedCall(700, () => this.showEnd());

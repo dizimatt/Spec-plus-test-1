@@ -69,5 +69,15 @@ export function generateTextures(scene) {
     g.lineStyle(3, COLORS.cellEdge).strokeRoundedRect(1.5, 1.5, 437, 297, 16);
   });
 
+  make(TEX.levelTile, 120, 120, (g) => {
+    g.fillStyle(COLORS.button).fillRoundedRect(0, 0, 120, 120, 14);
+    g.lineStyle(3, 0x7fb4e6).strokeRoundedRect(1.5, 1.5, 117, 117, 14);
+  });
+
+  make(TEX.levelLocked, 120, 120, (g) => {
+    g.fillStyle(COLORS.blocked).fillRoundedRect(0, 0, 120, 120, 14);
+    g.lineStyle(3, COLORS.cellEdge).strokeRoundedRect(1.5, 1.5, 117, 117, 14);
+  });
+
   g.destroy();
 }

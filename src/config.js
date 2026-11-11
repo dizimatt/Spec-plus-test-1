@@ -27,4 +27,6 @@ export const TEX = {
   button: 'button',
   overlay: 'overlay',          // 1px white square, tinted and scaled to dim the screen
   panel: 'panel',              // win/lose dialog background
+  levelTile: 'level-tile',     // level select tile, unlocked
+  levelLocked: 'level-locked', // level select tile, locked
 };
