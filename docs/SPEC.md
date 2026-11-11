@@ -1,9 +1,9 @@
-# Pipe Rush — Specification
+# Pipe Nightmare — Specification
 
-Status: Draft   Version: 0.1   Date: 2026-11-11
+Status: Approved   Version: 0.2   Date: 2026-11-11
 
 ## 1. Summary
-A real-time pipe-laying puzzle game built with Phaser, hosted as plain static files. Water starts flowing from a source on the left after a delay; the player places pipe pieces from a random queue and rotates tiles to build a connected route to the drain on the right before the water spills. Five hand-made levels, with unlocked progress saved in the browser. Working name; rename freely.
+A real-time pipe-laying puzzle game built with Phaser, hosted as plain static files. Water starts flowing from a source on the left after a delay; the player places pipe pieces from a random queue and rotates tiles to build a connected route to the drain on the right before the water spills. Five hand-made levels, scored by how few tiles are used, with unlocked progress and best scores saved in the browser.
 
 ## 2. Users and core journey
 Player: anyone with a desktop browser, playing alone (this is a personal project).
@@ -14,7 +14,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 4. Meanwhile the player clicks an empty cell to place the front piece of the queue, and clicks placed tiles to rotate them.
 5. Water advances tile by tile along the pipe. A tile the water has entered is locked.
 6. If water reaches the drain, the level is won and the next level unlocks. If it reaches a gap, a dead end, a blocked cell or the grid edge, it spills and the level is lost.
-7. Player retries, goes to the next level, or returns to the level select.
+7. On a win, the player sees their score (fewer tiles used = higher score). Player retries, goes to the next level, or returns to the level select.
 
 ## 3. Requirements
 
@@ -76,6 +76,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - Acceptance criteria:
   - [ ] Water leaving a tile into the drain triggers a win screen.
   - [ ] Water meeting an empty cell, a blocked cell, the grid edge, or a tile with no opening facing it triggers a spill and a lose screen.
+  - [ ] The win screen shows the level's score (see R-011).
   - [ ] Both outcomes offer Retry and Level select; a win also offers Next level (except on the last level).
   - [ ] Retry restores the level's starting state with a fresh random queue.
   - [ ] The player can keep placing and rotating unlocked tiles up until the moment of spill or win.
@@ -120,6 +121,18 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
   - [ ] Game scenes call the logic modules for rules instead of re-implementing them.
 - Origin: Assumption
 
+### R-011 Scoring
+- Priority: Must
+- Description: Winning a level gives a score that falls as more tiles are used. Best score per level is saved.
+- Acceptance criteria:
+  - [ ] Score is computed by a pure function of tiles placed: `score = max(0, 1000 - 50 * tilesPlaced)`, where `tilesPlaced` counts every piece placed in the attempt (rotations do not count).
+  - [ ] Placing more pieces never increases the score; examples: 10 tiles -> 500, 20 tiles -> 0, 25 tiles -> 0.
+  - [ ] The win screen shows the score and tiles used; the HUD shows the live tile count during play.
+  - [ ] The best score per level is saved in `localStorage`, survives a reload, and is shown on the level select; a lower score on a replay does not overwrite it.
+  - [ ] A lost level gives no score.
+  - [ ] Invalid or missing saved scores are treated as no score, with no crash.
+- Origin: Stated (more tiles used, lower score); Assumption (formula, counting rule, saving best)
+
 ## 4. Out of scope
 - T-junctions, crosses and any branching water
 - Pre-placed or fixed pipes (other than the source and drain)
@@ -144,8 +157,9 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - A-005 Levels unlock sequentially and the order is fixed — proposed default
 - A-006 Levels are JSON files, one per level — proposed default
 - A-007 Water speed is constant within a level; difficulty rises across levels — proposed default
-- Q-001 Does the game need a name other than "Pipe Rush"?
-- Q-002 Should the player get a score or star rating, or is winning enough? (Currently none.)
+- A-008 "Tiles used" means every piece placed during the attempt, including ones off the final route; score = max(0, 1000 - 50 x tiles placed); best score per level is stored in localStorage — proposed default, needs confirmation
+- Q-001 (resolved) Name is "Pipe Nightmare".
+- Q-002 (resolved) Scores are included, see R-011.
 
 ## 7. Task backlog
 - T-001 Scaffold: `index.html`, vendored Phaser, boot scene generating all textures, empty menu scene — Requirements: R-001, R-008 — Status: todo
@@ -154,7 +168,9 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - T-004 Game scene: grid, queue display, placing and rotating — Requirements: R-003, R-004, R-009 — Status: todo
 - T-005 Water flow animation, tile locking, win and lose screens — Requirements: R-005, R-006 — Status: todo
 - T-006 Level select, unlock progress in localStorage, error handling — Requirements: R-007, R-009 — Status: todo
-- T-007 Tune the 5 levels by playtest and confirm each is winnable — Requirements: R-002, R-007 — Status: todo
+- T-007 Scoring: score function with tests, tile counter, score on win screen, best scores saved and shown on level select — Requirements: R-011 — Status: todo
+- T-008 Tune the 5 levels by playtest and confirm each is winnable — Requirements: R-002, R-007, R-011 — Status: todo
 
 ## 8. Change log
 - 0.1 — Initial draft from /spec-plus interview.
+- 0.2 — Approved. Renamed to Pipe Nightmare; added R-011 scoring (fewer tiles = higher score), A-008, T-007; tuning moved to T-008; resolved Q-001, Q-002.
