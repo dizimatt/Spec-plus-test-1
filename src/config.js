@@ -1,5 +1,6 @@
 // Shared constants. Phaser 3.80.1 is vendored in lib/ (R-001).
 export const TILE = 64;
+export const FAST_FORWARD = 3; // water-time multiplier while the player's fast-forward button is on
 export const GAME_WIDTH = 960;
 export const GAME_HEIGHT = 640;
 export const COLORS = {
@@ -25,4 +26,8 @@ export const TEX = {
   source: 'source',
   drain: 'drain',
   button: 'button',
+  overlay: 'overlay',          // 1px white square, tinted and scaled to dim the screen
+  panel: 'panel',              // win/lose dialog background
+  levelTile: 'level-tile',     // level select tile, unlocked
+  levelLocked: 'level-locked', // level select tile, locked
 };
