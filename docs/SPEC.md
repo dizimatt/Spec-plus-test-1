@@ -1,6 +1,6 @@
 # Pipe Nightmare — Specification
 
-Status: Approved   Version: 0.2   Date: 2026-11-11
+Status: Approved   Version: 0.3   Date: 2026-11-12
 
 ## 1. Summary
 A real-time pipe-laying puzzle game built with Phaser, hosted as plain static files. Water starts flowing from a source on the left after a delay; the player places pipe pieces from a random queue and rotates tiles to build a connected route to the drain on the right before the water spills. Five hand-made levels, scored by how few tiles are used, with unlocked progress and best scores saved in the browser.
@@ -110,6 +110,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
   - [ ] The level select shows all 5 levels, with locked ones visibly distinct.
   - [ ] During a level, a button returns to level select and another restarts the level.
   - [ ] The queue, countdown/water status and level number are visible during play.
+  - [ ] The game title "Pipe Nightmare" is shown on the menu and on the game screen during play.
 - Origin: Assumption
 
 ### R-010 Testable game logic
@@ -166,7 +167,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - T-002 Pure logic modules (pieces, rotation, grid, queue, water step) with Node tests — Requirements: R-003, R-004, R-005, R-006, R-010 — Status: done
 - T-003 Level format, loader with validation, and 5 level files — Requirements: R-002, R-007 — Status: done
 - T-004 Game scene: grid, queue display, placing and rotating — Requirements: R-003, R-004, R-009 — Status: done
-- T-005 Water flow animation, tile locking, win and lose screens — Requirements: R-005, R-006 — Status: in-review
+- T-005 Water flow animation, tile locking, win and lose screens — Requirements: R-005, R-006 — Status: done
 - T-006 Level select, unlock progress in localStorage, error handling — Requirements: R-007, R-009 — Status: todo
 - T-007 Scoring: score function with tests, tile counter, score on win screen, best scores saved and shown on level select — Requirements: R-011 — Status: todo
 - T-008 Tune the 5 levels by playtest and confirm each is winnable — Requirements: R-002, R-007, R-011 — Status: todo
@@ -174,3 +175,4 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 ## 8. Change log
 - 0.1 — Initial draft from /spec-plus interview.
 - 0.2 — Approved. Renamed to Pipe Nightmare; added R-011 scoring (fewer tiles = higher score), A-008, T-007; tuning moved to T-008; resolved Q-001, Q-002.
+- 0.3 — R-009: added the on-screen game title (menu and game screen) after review of the first working GUI.

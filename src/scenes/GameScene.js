@@ -39,6 +39,7 @@ export default class GameScene extends Phaser.Scene {
     this.endShown = false;
 
     this.add.text(24, 20, `Level ${this.levelNumber}`, { ...TEXT, fontSize: '32px' });
+    this.add.text(400, 38, 'Pipe Nightmare', { ...TEXT, fontSize: '30px', fontStyle: 'bold' }).setOrigin(0.5);
     this.status = this.add.text(24, 62, '', { ...TEXT, fontSize: '20px', color: '#9fd0ff' });
     this.makeButton(GAME_WIDTH - 250, 38, 'Restart', () => this.scene.restart({ level: this.levelNumber }));
     this.makeButton(GAME_WIDTH - 110, 38, 'Levels', () => this.scene.start('Menu'));
