@@ -60,5 +60,14 @@ export function generateTextures(scene) {
     g.fillStyle(COLORS.button).fillRoundedRect(0, 0, 200, 48, 8);
   });
 
+  make(TEX.overlay, 4, 4, (g) => {
+    g.fillStyle(0xffffff).fillRect(0, 0, 4, 4);
+  });
+
+  make(TEX.panel, 440, 300, (g) => {
+    g.fillStyle(COLORS.bg).fillRoundedRect(0, 0, 440, 300, 16);
+    g.lineStyle(3, COLORS.cellEdge).strokeRoundedRect(1.5, 1.5, 437, 297, 16);
+  });
+
   g.destroy();
 }

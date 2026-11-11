@@ -25,4 +25,6 @@ export const TEX = {
   source: 'source',
   drain: 'drain',
   button: 'button',
+  overlay: 'overlay',          // 1px white square, tinted and scaled to dim the screen
+  panel: 'panel',              // win/lose dialog background
 };
