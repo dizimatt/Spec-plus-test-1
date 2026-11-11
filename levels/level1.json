@@ -1,0 +1,10 @@
+{
+  "width": 7,
+  "height": 5,
+  "sourceRow": 2,
+  "drainRow": 2,
+  "blocked": [],
+  "queueSize": 5,
+  "startDelay": 15,
+  "waterSpeed": 0.5
+}

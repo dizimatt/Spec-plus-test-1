@@ -164,7 +164,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 ## 7. Task backlog
 - T-001 Scaffold: `index.html`, vendored Phaser, boot scene generating all textures, empty menu scene — Requirements: R-001, R-008 — Status: done
 - T-002 Pure logic modules (pieces, rotation, grid, queue, water step) with Node tests — Requirements: R-003, R-004, R-005, R-006, R-010 — Status: done
-- T-003 Level format, loader with validation, and 5 level files — Requirements: R-002, R-007 — Status: todo
+- T-003 Level format, loader with validation, and 5 level files — Requirements: R-002, R-007 — Status: in-review
 - T-004 Game scene: grid, queue display, placing and rotating — Requirements: R-003, R-004, R-009 — Status: todo
 - T-005 Water flow animation, tile locking, win and lose screens — Requirements: R-005, R-006 — Status: todo
 - T-006 Level select, unlock progress in localStorage, error handling — Requirements: R-007, R-009 — Status: todo

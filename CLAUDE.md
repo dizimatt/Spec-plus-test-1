@@ -3,6 +3,6 @@ Task review: after committing a task, the developer may say "review T-xxx". Run 
 
 Project: Pipe Nightmare, a Phaser 3 pipe puzzle on plain static files (no build step). Phaser 3.80.1 is vendored in lib/.
 Run: `python3 -m http.server 8000` then open http://localhost:8000/ (ES modules do not work from file://). Tests: `node --test` (Node 24 rejects `node --test tests/`).
-Progress: T-001 done and reviewed (PASS); T-002 done and reviewed (PASS; src/logic/*, tests/logic.test.js). Next: T-003 (level format, loader, 5 levels). Backlog and statuses live in docs/SPEC.md section 7.
+Progress: T-001 done and reviewed (PASS); T-002 done and reviewed (PASS; src/logic/*, tests/logic.test.js). T-003 implemented, awaiting review (levels/*.json, src/logic/level.js validation, src/levels.js loader; BootScene loads levels into registry key 'levels' and shows errors). Next: T-004 (game scene). Level fields: width, height, sourceRow, drainRow, blocked [[x,y]], queueSize, startDelay (s), waterSpeed (tiles/s). Backlog and statuses live in docs/SPEC.md section 7.
 Conventions: default straight pipe is horizontal; default elbow opens north and east; rotation is 90 degrees clockwise. All shapes are drawn once into textures in BootScene (src/textures.js), never per frame.
 Open note: src/textures.js source/drain textures use hardcoded colours instead of COLORS (low priority cleanup).
