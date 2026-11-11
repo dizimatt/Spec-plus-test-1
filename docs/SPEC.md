@@ -1,6 +1,6 @@
 # Pipe Nightmare — Specification
 
-Status: Approved   Version: 0.3   Date: 2026-11-12
+Status: Approved   Version: 0.4   Date: 2026-11-12
 
 ## 1. Summary
 A real-time pipe-laying puzzle game built with Phaser, hosted as plain static files. Water starts flowing from a source on the left after a delay; the player places pipe pieces from a random queue and rotates tiles to build a connected route to the drain on the right before the water spills. Five hand-made levels, scored by how few tiles are used, with unlocked progress and best scores saved in the browser.
@@ -67,7 +67,8 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
   - [ ] Water fills each tile over a duration set by the level, visibly filling along the pipe path.
   - [ ] When water enters a tile, the tile can no longer be rotated.
   - [ ] Water enters the first grid cell from the source's side, and exits each tile through the opening opposite its entry, following the pipe shape.
-  - [ ] Water speed is the same for the whole level (no speed-up within a level).
+  - [ ] Water speed is the same for the whole level, with one exception: the player can turn on an optional fast-forward button (3x speed, for both the countdown and the flow) and turn it off again. It never changes by itself.
+  - [ ] Fast-forward does not change the score.
 - Origin: Stated (rising water, locked once entered); Assumption (constant speed, countdown)
 
 ### R-006 Win and lose
@@ -157,7 +158,7 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - A-004 Source and drain are fixed markers outside the grid edge, on rows set by the level — proposed default
 - A-005 Levels unlock sequentially and the order is fixed — proposed default
 - A-006 Levels are JSON files, one per level — proposed default
-- A-007 Water speed is constant within a level; difficulty rises across levels — proposed default
+- A-007 Water speed is constant within a level, apart from the optional player fast-forward (R-005); difficulty rises across levels — proposed default
 - A-008 "Tiles used" means every piece placed during the attempt, including ones off the final route; score = max(0, 1000 - 50 x tiles placed); best score per level is stored in localStorage — proposed default, needs confirmation
 - Q-001 (resolved) Name is "Pipe Nightmare".
 - Q-002 (resolved) Scores are included, see R-011.
@@ -176,3 +177,4 @@ Player: anyone with a desktop browser, playing alone (this is a personal project
 - 0.1 — Initial draft from /spec-plus interview.
 - 0.2 — Approved. Renamed to Pipe Nightmare; added R-011 scoring (fewer tiles = higher score), A-008, T-007; tuning moved to T-008; resolved Q-001, Q-002.
 - 0.3 — R-009: added the on-screen game title (menu and game screen) after review of the first working GUI.
+- 0.4 — R-005: added an optional player-controlled fast-forward (3x) button; water speed is otherwise still constant within a level.

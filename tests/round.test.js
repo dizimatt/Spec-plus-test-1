@@ -40,6 +40,23 @@ test('R-005 water fills one tile per 1/speed seconds, at constant speed', () => 
   assert.equal(r.path.length, 3);
 });
 
+test('R-005 fast-forward scales both the countdown and the fill speed', () => {
+  const g = row(4);
+  for (let x = 0; x < 4; x++) g.place(x, 1, STRAIGHT);
+  const r = new Round(g, opts);   // 5 s countdown, 0.5 s per tile
+  r.timeScale = 3;
+  r.update(1);                    // 3 s of countdown
+  assert.equal(r.countdown, 2);
+  r.update(1);                    // countdown ends, 1 s of water left over
+  assert.equal(r.phase, 'flowing');
+  assert.equal(r.path.length, 3); // 1 s of water at 2 tiles/s -> two tiles complete, third entered
+  r.timeScale = 1;
+  r.update(0.25);
+  assert.equal(r.progress, 0.5);
+  r.update(100);
+  assert.equal(r.phase, 'won');
+});
+
 test('R-005 time left over after the countdown carries into filling', () => {
   const g = row(3);
   for (let x = 0; x < 3; x++) g.place(x, 1, STRAIGHT);

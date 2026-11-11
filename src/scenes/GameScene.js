@@ -1,4 +1,4 @@
-import { GAME_WIDTH, GAME_HEIGHT, TILE, TEX } from '../config.js';
+import { GAME_WIDTH, GAME_HEIGHT, TILE, TEX, FAST_FORWARD } from '../config.js';
 import { Grid } from '../logic/grid.js';
 import { PieceQueue } from '../logic/queue.js';
 import { Round } from '../logic/round.js';
@@ -35,6 +35,11 @@ export default class GameScene extends Phaser.Scene {
     this.grid = new Grid(level);
     this.queue = new PieceQueue(level.queueSize);
     this.round = new Round(this.grid, level);
+    // DEV CHEAT (kept on purpose, see README): P pauses/resumes the water clock at any
+    // time, G starts the water now. Both work mid-level, so no reload is needed.
+    this.cheatPaused = false;
+    this.input.keyboard.on('keydown-P', () => { this.cheatPaused = !this.cheatPaused; });
+    this.input.keyboard.on('keydown-G', () => { if (this.round.phase === 'countdown') this.round.countdown = 0; });
     this.tileImages = new Map();  // "x,y" -> pipe image
     this.cellImages = new Map();  // "x,y" -> cell image
     this.waterImages = [];        // one per entry in round.path
@@ -46,6 +51,13 @@ export default class GameScene extends Phaser.Scene {
     this.status = this.add.text(24, 62, '', { ...TEXT, fontSize: '20px', color: '#9fd0ff' });
     this.makeButton(GAME_WIDTH - 250, 38, 'Restart', () => this.scene.restart({ level: this.levelNumber }));
     this.makeButton(GAME_WIDTH - 110, 38, 'Levels', () => this.scene.start('Menu'));
+    // Optional fast-forward so a finished route is not a boring wait (R-005).
+    this.fast = false;
+    const ff = this.makeButton(QUEUE_X, 560, `Speed x${FAST_FORWARD}`, () => {
+      this.fast = !this.fast;
+      this.round.timeScale = this.fast ? FAST_FORWARD : 1;
+      ff.text.setText(this.fast ? 'Speed x1' : `Speed x${FAST_FORWARD}`).setColor(this.fast ? '#ffd76a' : '#ffffff');
+    });
 
     this.buildGrid();
     this.buildQueue();
@@ -54,10 +66,11 @@ export default class GameScene extends Phaser.Scene {
   makeButton(x, y, label, onClick, depth = 0) {
     const img = this.add.image(x, y, TEX.button).setDisplaySize(120, 40)
       .setInteractive({ useHandCursor: true }).setDepth(depth);
-    this.add.text(x, y, label, { ...TEXT, fontSize: '20px' }).setOrigin(0.5).setDepth(depth);
+    const text = this.add.text(x, y, label, { ...TEXT, fontSize: '20px' }).setOrigin(0.5).setDepth(depth);
     img.on('pointerover', () => img.setTint(0xbbddff));
     img.on('pointerout', () => img.clearTint());
     img.on('pointerdown', onClick);
+    return { img, text };
   }
 
   cellCentre(x, y) {
@@ -127,7 +140,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    this.round.update(delta / 1000);
+    if (!this.cheatPaused) this.round.update(delta / 1000); // DEV CHEAT: P pauses
     this.drawWater();
     this.updateStatus();
     if (this.round.over && !this.endShown) {
@@ -141,8 +154,9 @@ export default class GameScene extends Phaser.Scene {
 
   updateStatus() {
     const r = this.round;
-    if (r.phase === 'countdown') this.status.setText(`Water starts in ${Math.ceil(r.countdown)}s`);
-    else if (r.phase === 'flowing') this.status.setText('Water is flowing!');
+    if (this.cheatPaused && !this.round.over) this.status.setText('PAUSED: P resume, G go'); // DEV CHEAT
+    else if (r.phase === 'countdown') this.status.setText(`Water starts in ${Math.ceil(r.countdown)}s${this.fast ? ` (x${FAST_FORWARD})` : ''}`);
+    else if (r.phase === 'flowing') this.status.setText(`Water is flowing!${this.fast ? ` (x${FAST_FORWARD})` : ''}`);
     else this.status.setText(r.phase === 'won' ? 'Connected!' : 'Spilled!');
   }
 

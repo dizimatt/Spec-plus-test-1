@@ -11,6 +11,7 @@ export class Round {
   constructor(grid, { startDelay, waterSpeed }) {
     this.grid = grid;
     this.waterSpeed = waterSpeed; // tiles per second, constant (A-007)
+    this.timeScale = 1;           // 1 normally; the player's fast-forward raises it
     this.countdown = startDelay;  // seconds until water starts
     this.phase = 'countdown';
     this.path = [];
@@ -23,6 +24,7 @@ export class Round {
 
   update(dt) {
     if (this.over) return;
+    dt *= this.timeScale;
     if (this.phase === 'countdown') {
       this.countdown -= dt;
       if (this.countdown > 0) return;
