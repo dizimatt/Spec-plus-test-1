@@ -1,0 +1,21 @@
+{
+  "width": 9,
+  "height": 6,
+  "sourceRow": 4,
+  "drainRow": 1,
+  "blocked": [
+    [2,3],
+    [2,4],
+    [2,5],
+    [4,0],
+    [4,1],
+    [4,2],
+    [6,2],
+    [6,3],
+    [6,4],
+    [7,1]
+  ],
+  "queueSize": 5,
+  "startDelay": 8,
+  "waterSpeed": 0.85
+}
