@@ -17,5 +17,12 @@ export default class MenuScene extends Phaser.Scene {
       this.add.image(x, 280, TEX.cell);
       this.add.image(x, 280, key);
     });
+
+    // Temporary entry point until the level select arrives in T-006.
+    const play = this.add.image(GAME_WIDTH / 2, 440, TEX.button).setInteractive({ useHandCursor: true });
+    this.add.text(GAME_WIDTH / 2, 440, 'Play level 1', {
+      fontFamily: 'sans-serif', fontSize: '24px', color: '#ffffff',
+    }).setOrigin(0.5);
+    play.on('pointerdown', () => this.scene.start('Game', { level: 1 }));
   }
 }
